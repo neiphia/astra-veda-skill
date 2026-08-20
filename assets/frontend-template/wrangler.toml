@@ -1,0 +1,17 @@
+# Generated from the existing astra-veda-star Pages project.
+name = "astra-veda-star"
+compatibility_date = "2026-08-18"
+pages_build_output_dir = "./dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "astra-veda-jobs"
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+
+[[r2_buckets]]
+binding = "PDF_BUCKET"
+bucket_name = "astra-veda-pdfs"
+
+[[queues.producers]]
+binding = "ANALYSIS_QUEUE"
+queue = "astra-analysis"

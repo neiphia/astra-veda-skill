@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>星图谕所 | 吠陀星盘解读</title>
+    <meta
+      name="description"
+      content="上传 Jagannatha Hora 生成的印度占星 PDF，获得事业、爱情与人生指南的结构化解读。"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <canvas id="starfield" aria-hidden="true"></canvas>
+    <div class="nebula-glow nebula-one" aria-hidden="true"></div>
+    <div class="nebula-glow nebula-two" aria-hidden="true"></div>
+    <div class="stardust" aria-hidden="true"></div>
+    <div class="scanline" aria-hidden="true"></div>
+    <div class="gridveil" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <button class="icon-button" id="backButton" type="button" aria-label="返回上一页" title="返回">
+        <span aria-hidden="true">‹</span>
+      </button>
+      <a class="brandmark" href="#/" aria-label="返回首页">
+        <span class="brand-sigil" aria-hidden="true">✦</span>
+        <span>ASTRA VEDA</span>
+      </a>
+      <button class="icon-button" id="settingsButton" type="button" aria-label="打开设置" title="设置">
+        <span aria-hidden="true">⌘</span>
+      </button>
+    </header>
+
+    <main id="app" class="app-shell" tabindex="-1"></main>
+
+    <dialog id="settingsDialog" class="settings-dialog">
+      <form method="dialog" class="panel settings-panel">
+        <div class="panel-heading">
+          <span class="eyebrow">API PROXY</span>
+          <h2>连接 Gemini Worker</h2>
+        </div>
+        <label class="field-label" for="workerEndpoint">Cloudflare Worker 地址</label>
+        <input
+          id="workerEndpoint"
+          class="text-input"
+          type="url"
+          placeholder="https://your-worker.your-name.workers.dev"
+          autocomplete="off"
+        />
+        <p class="microcopy">
+          留空时网站会使用模拟结果，适合本地预览。真实 API Key 只放在 Worker 环境变量
+          <code>GEMINI_API_KEY</code> 中，不写入前端。
+        </p>
+        <div class="settings-actions">
+          <button class="ghost-button" value="cancel" type="submit">关闭</button>
+          <button class="primary-button compact" id="saveSettings" value="default" type="submit">保存</button>
+        </div>
+      </form>
+    </dialog>
+
+
+    <template id="homeTemplate">
+      <section class="home-view">
+        <div class="astro-ring" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <div class="hero-copy">
+          <p class="eyebrow">JYOTISHA READING CONSOLE</p>
+          <h1>星图谕所</h1>
+          <p class="subtitle">解码你的吠陀星盘</p>
+          <p class="manifesto">
+            星盘揭示倾向，不书写结局。唯有准备好直面真相、并仍有决心用行动改写人生的人，
+            才真正有资格翻开它。星辰标注的是地形，而走向何方，始终由你决定。
+          </p>
+        </div>
+
+        <section class="panel upload-panel" aria-labelledby="uploadTitle">
+          <div class="panel-heading upload-heading">
+            <span class="eyebrow">STEP 01</span>
+            <h2 id="uploadTitle">上传星盘 PDF</h2>
+          </div>
+          <p class="intake-notice" id="intakeNotice" role="status" hidden></p>
+          <label class="dropzone" id="dropzone" for="pdfInput">
+            <input id="pdfInput" type="file" accept="application/pdf,.pdf" hidden />
+            <span class="upload-icon" aria-hidden="true">⇪</span>
+            <strong>拖拽星盘 PDF 到此处，或点击选择文件</strong>
+            <small>支持 Jagannatha Hora 导出的 PDF，建议 10MB 以内</small>
+          </label>
+          <div class="file-chip hidden" id="fileChip">
+            <span id="fileMeta"></span>
+            <button class="chip-action" id="removeFile" type="button">重新上传</button>
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="genderTitle">
+          <div class="panel-heading">
+            <span class="eyebrow">STEP 02</span>
+            <h2 id="genderTitle">选择你的性别</h2>
+          </div>
+          <div class="segmented" role="radiogroup" aria-label="选择性别">
+            <button class="gender-card" data-gender="男" type="button" role="radio" aria-checked="false">
+              <span aria-hidden="true">♂</span>
+              <strong>男</strong>
+            </button>
+            <button class="gender-card" data-gender="女" type="button" role="radio" aria-checked="false">
+              <span aria-hidden="true">♀</span>
+              <strong>女</strong>
+            </button>
+          </div>
+        </section>
+
+        <section class="action-stack">
+          <button class="primary-button" id="startButton" type="button" disabled title="请先上传星盘 PDF 并选择性别">
+            开始解读星盘
+          </button>
+          <p class="microcopy">全站最多同时保留 5 份报告，按顺序逐份生成。PDF 会临时存入 Cloudflare，报告完成或最终失败后立即删除；结果保留 24 小时。</p>
+        </section>
+      </section>
+    </template>
+  </body>
+  <script src="./app.js"></script>
+</html>

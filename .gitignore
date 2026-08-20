@@ -1,0 +1,11 @@
+.DS_Store
+Thumbs.db
+node_modules/
+.wrangler/
+.dev.vars
+.env
+.env.*
+key.txt
+*.pdf
+*.zip
+

@@ -1,0 +1,16 @@
+{
+  "name": "star",
+  "version": "1.0.0",
+  "description": "一个面向 Jagannatha Hora 印度占星 PDF 的静态 H5 网站。",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "wrangler": "^4.123.0"
+  }
+}

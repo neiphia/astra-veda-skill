@@ -1,0 +1,5 @@
+interface:
+  display_name: "Astra Veda Cloudflare"
+  short_description: "搭建和维护 Gemini 印度占星 PDF 分析网站"
+  default_prompt: "使用 $astra-veda-cloudflare 基于模板搭建或维护一个印度占星 PDF 分析网站。"
+

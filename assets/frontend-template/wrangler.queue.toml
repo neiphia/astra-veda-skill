@@ -1,0 +1,26 @@
+name = "astra-veda-queue-worker"
+main = "queue-worker.js"
+compatibility_date = "2026-08-18"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "astra-veda-jobs"
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+
+[[r2_buckets]]
+binding = "PDF_BUCKET"
+bucket_name = "astra-veda-pdfs"
+
+[[queues.producers]]
+binding = "ANALYSIS_QUEUE"
+queue = "astra-analysis"
+
+[[queues.consumers]]
+queue = "astra-analysis"
+max_batch_size = 1
+max_batch_timeout = 1
+max_retries = 3
+max_concurrency = 1
+
+[triggers]
+crons = ["17 * * * *"]
