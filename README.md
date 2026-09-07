@@ -52,13 +52,13 @@ pip install pyswisseph
 # 用虚构示例数据跑全量排盘
 python3 scripts/vedic_engine.py --example
 
-# 指定出生资料
-python3 scripts/vedic_engine.py --year 1995 --month 10 --day 17 \
-  --hour 13 --tz 8 --lat 23.1 --lon 113.46
+# 指定出生资料（示例数据，请替换为用户真实资料）
+python3 scripts/vedic_engine.py --year 1990 --month 1 --day 1 \
+  --hour 12 --tz 0 --lat 51.5 --lon -0.13
 
 # 带历史事件回测校准
-python3 scripts/vedic_engine.py --year 1995 --month 10 --day 17 \
-  --hour 13 --tz 8 --lat 23.1 --lon 113.46 \
+python3 scripts/vedic_engine.py --year 1990 --month 1 --day 1 \
+  --hour 12 --tz 0 --lat 51.5 --lon -0.13 \
   --round0 events.json
 ```
 
