@@ -5,6 +5,7 @@
 ## 能做什么
 
 - 上传 Jagannatha Hora 导出的印度占星 PDF
+- Round 0 排盘校验与历史回测：本地 Swiss Ephemeris 引擎计算关键度数，与 Gemini 从 PDF 读取的值交叉核对；用户提供 3-5 个历史事件回测大运/小运/行运，校准解读口径偏好
 - 使用 Gemini 串行生成 7 轮报告
 - 大致分析、事业 Phase 1-4、爱情分析与人生指南
 - Cloudflare 全站队列与最多 5 份活跃任务限制
@@ -39,6 +40,54 @@ assets/frontend-template/
 ```text
 references/vedic-astrology-prompts.md
 ```
+
+## 本地排盘校验（Round 0）
+
+在正式解读前，可用本地 Swiss Ephemeris 引擎（`scripts/vedic_engine.py`）进行排盘校验与历史回测：
+
+```bash
+# 安装依赖
+pip install pyswisseph
+
+# 用虚构示例数据跑全量排盘
+python3 scripts/vedic_engine.py --example
+
+# 指定出生资料
+python3 scripts/vedic_engine.py --year 1995 --month 10 --day 17 \
+  --hour 13 --tz 8 --lat 23.1 --lon 113.46
+
+# 带历史事件回测校准
+python3 scripts/vedic_engine.py --year 1995 --month 10 --day 17 \
+  --hour 13 --tz 8 --lat 23.1 --lon 113.46 \
+  --round0 events.json
+```
+
+`events.json` 格式：
+```json
+[
+  {"year": 2010, "desc": "大学毕业"},
+  {"year": 2015, "desc": "第一份工作"},
+  {"year": 2020, "desc": "职业转型"},
+  {"year": 2023, "desc": "搬家/出国"},
+  {"year": 2025, "desc": "重要人际关系变化"}
+]
+```
+
+输出 JSON 包含 D1 全行星数据、D9 九分盘、Vimshottari 大运序列、Jaimini Karaka（AK~DK）、Arudha（AL/UL/A7/A10）、逐年行运（土星/木星/Rahu/Ketu）、土星回归、木星回归，以及 round0 校准报告（MD/AD 匹配、行运宫位、可信度评级）。
+
+**回测校准能力：** 用户用历史事件反推校准解读口径，避免 AI 对双主星事件形式做过拟合预测。尤其在 L5=L10（同一星同时守护恋爱宫与事业宫）等双主星场景下，回测能确认该星能量实际更常以哪个宫位主题显化，从而修正后续解读的置信度与事件形式判断。
+
+## 部署补充
+
+部署前请确认以下 checklist（未经用户明确授权不得执行真实部署）：
+
+1. `wrangler login` — 确保已登录 Cloudflare 账号
+2. 创建 D1 数据库、R2 存储桶、Queue 队列，并将 ID 填入 wrangler 配置
+3. `npx wrangler secret put GEMINI_API_KEY` — 将 Gemini API Key 设为 Cloudflare Secret
+4. `npx wrangler d1 migrations apply astra-veda-jobs --remote` — 执行数据库迁移
+5. `npx wrangler deploy --config wrangler.queue.toml` — 部署 Queue Worker
+6. `npx wrangler pages deploy dist --project-name <project> --branch production` — 部署 Pages 前端
+7. 验证 `/api/capacity`、上传限流、Queue 消费、D1 活跃计数
 
 ## 部署前准备
 
